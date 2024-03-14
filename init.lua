@@ -25,7 +25,16 @@ local plugins = {
     },
 	{ "rose-pine/neovim", name = "rose-pine" },
     {"catppuccin/nvim",name="catppuccin",priority=1000},
-    {"nvim-treesitter/nvim-treesitter",build =":TSUpdate"}
+    {"nvim-treesitter/nvim-treesitter",build =":TSUpdate"},
+    {
+        "nvim-neo-tree/neo-tree.nvim",
+        branch = "v3.x",
+        dependencies = {
+          "nvim-lua/plenary.nvim",
+          "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
+          "MunifTanjim/nui.nvim",
+        }
+    }
 }
 
 require("lazy").setup(plugins, opts)
@@ -38,6 +47,8 @@ vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
 vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
 vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
 
+-- Neotree keymap
+vim.keymap.set('n','<leader>fe', ':Neotree filesystem reveal left<CR>',{})
 -- Themes
 --require("catppuccin").setup()
 --vim.cmd.colorscheme "catppuccin-mocha"
