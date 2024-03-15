@@ -1,7 +1,8 @@
 print("Hello Welcome to Neovim this is Megh config!!")
 vim.g.mapleader = " "
 vim.keymap.set("n", "<leader>ex", vim.cmd.Ex)
-
+vim.opt.number = true
+vim.o.breakindent = true
 -- Lazy Vim package manager
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
