@@ -1,2 +1,5 @@
 # neovim
-my neovim setup keeping it simple!! 
+My Neovim setup keeping it simple!! 
+- LSP
+- Fuzzy finder
+  
