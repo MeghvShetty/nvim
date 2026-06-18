@@ -1,0 +1,4 @@
+font-size = 25
+theme = vesper
+font-family = "SF Mono"
+font-family = "Symbols Nerd Font Mono"
