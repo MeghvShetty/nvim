@@ -972,10 +972,11 @@ require('lazy').setup({
       --  Check out: https://github.com/echasnovski/mini.nvim
     end,
   },
-  -- { -- Highlight, edit, and navigate code
+
+ -- { -- Highlight, edit, and navigate codeF
   --   'nvim-treesitter/nvim-treesitter',
-  --   commit = 'f197a15b0d9e1f9c666d5a786a32e80e65092374',
   --   build = ':TSUpdate',
+  --   branch = 'master',
   --   main = 'nvim-treesitter.configs', -- Sets main module to use for opts
   --   -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
   --   opts = {
@@ -1013,7 +1014,51 @@ require('lazy').setup({
   -- require 'kickstart.plugins.lint',
   require 'kickstart.plugins.autopairs',
   -- require 'kickstart.plugins.neo-tree',
-  -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
+{ -- Highlight, edit, and navigate code
+    'nvim-treesitter/nvim-treesitter',
+    branch = 'main', -- Explicitly target the frozen main branch
+    build = ':TSUpdate',
+    config = function()
+      -- The updated barebones setup handles initialization
+      require('nvim-treesitter').setup()
+
+      -- Download parsers specifically tailored for your language stack
+      require('nvim-treesitter').install({
+        'go', 'python', 'terraform', 'javascript', 'tsx', 'json', 'yaml', 'bash',
+        'lua', 'markdown', 'markdown_inline', 'vim', 'vimdoc' -- editor necessities
+      })
+
+      -- Turn on native highlighting and code indentation via autocommands
+      vim.api.nvim_create_autocmd('FileType', {
+        callback = function()
+          pcall(vim.treesitter.start)
+          vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+        end,
+      })
+    end,
+  },{ -- Highlight, edit, and navigate code
+    'nvim-treesitter/nvim-treesitter',
+    branch = 'main', -- Explicitly target the frozen main branch
+    build = ':TSUpdate',
+    config = function()
+      -- The updated barebones setup handles initialization
+      require('nvim-treesitter').setup()
+
+      -- Download parsers specifically tailored for your language stack
+      require('nvim-treesitter').install({
+        'go', 'python', 'terraform', 'javascript', 'tsx', 'json', 'yaml', 'bash',
+        'lua', 'markdown', 'markdown_inline', 'vim', 'vimdoc' -- editor necessities
+      })
+
+      -- Turn on native highlighting and code indentation via autocommands
+      vim.api.nvim_create_autocmd('FileType', {
+        callback = function()
+          pcall(vim.treesitter.start)
+          vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+        end,
+      })
+    end,
+  },  require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
