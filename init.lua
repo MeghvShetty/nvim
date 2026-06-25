@@ -672,8 +672,37 @@ require('lazy').setup({
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
         -- clangd = {},
-        -- gopls = {},
-        pyright = {},
+        gopls = {
+          settings = {
+            gopls = {
+              hints = {
+                assignVariableTypes = true,
+                compositeLiteralFields = true,
+                constantValues = true,
+                functionTypeParameters = true,
+                parameterNames = true,
+                rangeVariableTypes = true,
+              },
+              analyses = {
+                unusedparams = true,
+                nilness = true,
+                unusedwrite = true,
+              },
+              staticcheck = true,
+              usePlaceholders = true, -- fills function args when you autocomplete
+            },
+          },
+        },
+        pyright = {
+          settings = {
+            python = {
+              analysis = {
+                reportUnusedImport = 'none',
+                reportUnusedVariable = 'none',
+              },
+            },
+          },
+        },
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
@@ -716,6 +745,7 @@ require('lazy').setup({
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
+        'goimports',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -768,6 +798,7 @@ require('lazy').setup({
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
+        go = { 'goimports', 'gofmt' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --
@@ -850,7 +881,7 @@ require('lazy').setup({
       completion = {
         -- By default, you may press `<c-space>` to show the documentation.
         -- Optionally, set `auto_show = true` to show the documentation after a delay.
-        documentation = { auto_show = false, auto_show_delay_ms = 500 },
+        documentation = { auto_show = true, auto_show_delay_ms = 200 },
       },
 
       sources = {
@@ -881,20 +912,23 @@ require('lazy').setup({
     -- change the command in the config to whatever the name of that colorscheme is.
     --
     -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-    'nexxeln/vesper.nvim',
+    'rose-pine/neovim',
     priority = 1000, -- Make sure to load this before all the other start plugins.
     config = function()
       ---@diagnostic disable-next-line: missing-fields
-      require('vesper').setup {
+      require('rose-pine').setup {
         styles = {
-          comments = { italic = false }, -- Disable italics in comments
+          variant = 'dawn',
+          keywordStyle = { italic = false },
+          variablebuiltinStyle = { italic = false },
+          comments = { italic = true }, -- Disable italics in comments
         },
       }
 
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'vesper'
+      vim.cmd.colorscheme 'rose-pine-main'
     end,
   },
 
@@ -938,31 +972,33 @@ require('lazy').setup({
       --  Check out: https://github.com/echasnovski/mini.nvim
     end,
   },
-  { -- Highlight, edit, and navigate code
-    'nvim-treesitter/nvim-treesitter',
-    build = ':TSUpdate',
-    main = 'nvim-treesitter.configs', -- Sets main module to use for opts
-    -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
-    opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
-      -- Autoinstall languages that are not installed
-      auto_install = true,
-      highlight = {
-        enable = true,
-        -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
-        --  If you are experiencing weird indenting issues, add the language to
-        --  the list of additional_vim_regex_highlighting and disabled languages for indent.
-        additional_vim_regex_highlighting = { 'ruby' },
-      },
-      indent = { enable = true, disable = { 'ruby' } },
-    },
-    -- There are additional nvim-treesitter modules that you can use to interact
-    -- with nvim-treesitter. You should go explore a few and see what interests you:
-    --
-    --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
-    --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
-    --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
-  },
+
+ -- { -- Highlight, edit, and navigate codeF
+  --   'nvim-treesitter/nvim-treesitter',
+  --   build = ':TSUpdate',
+  --   branch = 'master',
+  --   main = 'nvim-treesitter.configs', -- Sets main module to use for opts
+  --   -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
+  --   opts = {
+  --     ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
+  --     -- Autoinstall languages that are not installed
+  --     auto_install = true,
+  --     highlight = {
+  --       enable = true,
+  --       -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
+  --       --  If you are experiencing weird indenting issues, add the language to
+  --       --  the list of additional_vim_regex_highlighting and disabled languages for indent.
+  --       additional_vim_regex_highlighting = { 'ruby' },
+  --     },
+  --     indent = { enable = true, disable = { 'ruby' } },
+  --   },
+  --   -- There are additional nvim-treesitter modules that you can use to interact
+  --   -- with nvim-treesitter. You should go explore a few and see what interests you:
+  --   --
+  --   --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
+  --   --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
+  --   --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+  -- },
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
@@ -978,7 +1014,51 @@ require('lazy').setup({
   -- require 'kickstart.plugins.lint',
   require 'kickstart.plugins.autopairs',
   -- require 'kickstart.plugins.neo-tree',
-  -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
+{ -- Highlight, edit, and navigate code
+    'nvim-treesitter/nvim-treesitter',
+    branch = 'main', -- Explicitly target the frozen main branch
+    build = ':TSUpdate',
+    config = function()
+      -- The updated barebones setup handles initialization
+      require('nvim-treesitter').setup()
+
+      -- Download parsers specifically tailored for your language stack
+      require('nvim-treesitter').install({
+        'go', 'python', 'terraform', 'javascript', 'tsx', 'json', 'yaml', 'bash',
+        'lua', 'markdown', 'markdown_inline', 'vim', 'vimdoc' -- editor necessities
+      })
+
+      -- Turn on native highlighting and code indentation via autocommands
+      vim.api.nvim_create_autocmd('FileType', {
+        callback = function()
+          pcall(vim.treesitter.start)
+          vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+        end,
+      })
+    end,
+  },{ -- Highlight, edit, and navigate code
+    'nvim-treesitter/nvim-treesitter',
+    branch = 'main', -- Explicitly target the frozen main branch
+    build = ':TSUpdate',
+    config = function()
+      -- The updated barebones setup handles initialization
+      require('nvim-treesitter').setup()
+
+      -- Download parsers specifically tailored for your language stack
+      require('nvim-treesitter').install({
+        'go', 'python', 'terraform', 'javascript', 'tsx', 'json', 'yaml', 'bash',
+        'lua', 'markdown', 'markdown_inline', 'vim', 'vimdoc' -- editor necessities
+      })
+
+      -- Turn on native highlighting and code indentation via autocommands
+      vim.api.nvim_create_autocmd('FileType', {
+        callback = function()
+          pcall(vim.treesitter.start)
+          vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+        end,
+      })
+    end,
+  },  require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
@@ -1020,14 +1100,3 @@ vim.opt.expandtab = true
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.softtabstop = 4
-
-local pyright = {
-  settings = {
-    python = {
-      analysis = {
-        reportUnusedImport = 'none', -- kills "not accessed"
-        reportUnusedVariable = 'none',
-      },
-    },
-  },
-}
