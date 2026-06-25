@@ -912,20 +912,23 @@ require('lazy').setup({
     -- change the command in the config to whatever the name of that colorscheme is.
     --
     -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-    'nexxeln/vesper.nvim',
+    'rose-pine/neovim',
     priority = 1000, -- Make sure to load this before all the other start plugins.
     config = function()
       ---@diagnostic disable-next-line: missing-fields
-      require('vesper').setup {
+      require('rose-pine').setup {
         styles = {
-          comments = { italic = false }, -- Disable italics in comments
+          variant = 'dawn',
+          keywordStyle = { italic = false },
+          variablebuiltinStyle = { italic = false },
+          comments = { italic = true }, -- Disable italics in comments
         },
       }
 
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'vesper'
+      vim.cmd.colorscheme 'rose-pine-main'
     end,
   },
 
@@ -971,6 +974,7 @@ require('lazy').setup({
   },
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
+    commit = 'f197a15b0d9e1f9c666d5a786a32e80e65092374',
     build = ':TSUpdate',
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
