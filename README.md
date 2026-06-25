@@ -239,3 +239,10 @@ sudo pacman -S --noconfirm --needed gcc make git ripgrep fd unzip neovim
 ```
 </details>
 
+
+=====
+brew link --overwrite tree-sitter
+echo 'export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"' >> ~/.zshrc
+source ~/.zshrc
+
+brew install tree-sitter-cli
